@@ -1,8 +1,8 @@
-# 🔬 Nano Research - Aplikasi Analisis Penelitian
+# 🔬 Nano Research - Aplikasi Analisis Penelitian Kelompok 6
 
-![Nano Research](https://via.placeholder.com/800x200/0066CC/FFFFFF?text=NANO+RESEARCH+-+Kelompok+6+AKA+Bogor+2026)
+![Nano Research Banner](https://via.placeholder.com/800x200/FF8C42/FFFFFF?text=NANO+RESEARCH+-+Kelompok+6+AKA+Bogor+2026)
 
-Aplikasi web untuk analisis penelitian yang dikembangkan oleh **Kelompok 6 D4 Politeknik AKA Bogor Tahun 2026**.
+Aplikasi web modern untuk analisis penelitian yang dikembangkan oleh **Kelompok 6 Politeknik AKA Bogor Tahun 2026**.
 
 ## 👥 Anggota Kelompok 6
 1. **Dias Subarna** 
@@ -11,30 +11,36 @@ Aplikasi web untuk analisis penelitian yang dikembangkan oleh **Kelompok 6 D4 Po
 4. **Naila Amanda Putri** 
 5. **Yudho Pamungkas** 
 
-## ✨ Fitur Utama
+## 🎨 Fitur Utama
+
+### 🎯 Tema Warna: Jingga Muda (#FF8C42)
+- Warna primer: #FF8C42
+- Warna sekunder: #FFB347
+- Warna aksen: #FF6B21
+- Background: #FFE5D9
+
+### 🌙☀️ Mode Dark/Light
+- **Mode Terang**: Tema cerah dengan aksen jingga
+- **Mode Gelap**: Tema gelap dengan aksen jingga
+- Toggle switch di sidebar
 
 ### 📝 Resume Penelitian
-- Form input terstruktur untuk data penelitian
-- Preview resume dalam format profesional
-- Export ke PDF dengan watermark kelompok
-- Template standar penelitian akademik
+- Form input terstruktur
+- Preview real-time
+- Export ke PDF
+- Template profesional
 
 ### 📈 Kurva Kalibrasi
 - Analisis regresi linear lengkap
-- Perhitungan slope, intercept, R², dan statistik lainnya
+- Input data manual atau upload file
+- **Format file support**: Excel (.xlsx, .xls), CSV (.csv)
 - Grafik interaktif dengan Plotly
-- Export hasil dalam multiple format (PNG, CSV, PDF)
+- Download hasil dalam berbagai format
 
-### 🎨 UI Modern
-- **Mode Dark/Light** - Toggle tema sesuai preferensi
-- Desain clean dan professional
-- Warna khas Kelompok 6 (Biru AKA)
-- Responsive untuk semua device
+## 🚀 Cara Deploy
 
-## 🚀 Cara Menjalankan
-
-### Deploy di Streamlit Cloud (Rekomendasi)
-1. Fork repository ini ke GitHub Anda
+### Deploy di Streamlit Cloud
+1. Fork repository ini ke GitHub
 2. Buka [share.streamlit.io](https://share.streamlit.io)
 3. Login dengan akun GitHub
 4. Klik "New app"
