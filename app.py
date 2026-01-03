@@ -275,7 +275,7 @@ def create_resume_pdf(resume_data):
     header_text = f"""
     <para alignment="center">
     <font size="12" color="#FF8C42"><b>NANO RESEARCH</b></font><br/>
-    <font size="10">Kelompok 6 - Politeknik AKA Bogor</font><br/>
+    <font size="10">Politeknik AKA Bogor</font><br/>
     <font size="10">Tahun 2026</font>
     </para>
     """
@@ -292,7 +292,6 @@ def create_resume_pdf(resume_data):
         ["Judul Penelitian", resume_data.get('judul', '')],
         ["Peneliti", resume_data.get('peneliti', '')],
         ["NIM", resume_data.get('nim', '')],
-        ["Kelompok", "6 - AKA Bogor 2026"],
         ["Tanggal", resume_data.get('tanggal', datetime.now().strftime("%d %B %Y"))],
         ["Pembimbing", resume_data.get('pembimbing', '')],
     ]
@@ -474,16 +473,6 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Quick Stats
-    st.markdown("### 📊 Statistik Cepat")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Analisis", "18", "+3")
-    with col2:
-        st.metric("Resume", "12", "+2")
-    
-    st.markdown("---")
-    
     # Tips
     with st.expander("💡 Tips Cepat"):
         st.info("""
@@ -513,9 +502,9 @@ if selected_page == "🏠 Beranda":
     
     # Mode Indikator
     if st.session_state.dark_mode:
-        st.info("🌙 **Mode Gelap Aktif** - Tema warna disesuaikan untuk pengalaman malam")
+        st.info("🌙 **Mode Gelap Aktif** - Tema warna gelap menyesuaikan mood malam")
     else:
-        st.info("☀️ **Mode Terang Aktif** - Tema warna cerah dengan aksen jingga muda")
+        st.info("☀️ **Mode Terang Aktif** - Tema warna cerah untuk menyinari harimu!")
     
     # Hero Section
     col_hero1, col_hero2 = st.columns([2, 1])
@@ -525,7 +514,7 @@ if selected_page == "🏠 Beranda":
         <div class="info-card">
         <h3 style="color: white; text-align: center;">Selamat Datang di Nano Research!</h3>
         <p style="color: white; text-align: center;">
-        Platform lengkap untuk analisis penelitian dengan tema **jingga muda** khas Kelompok 6. 
+        Platform mudah untuk analisis penelitian oleh Kelompok 6. 
         Dilengkapi dengan mode gelap/terang untuk kenyamanan visual.
         </p>
         </div>
@@ -585,28 +574,6 @@ if selected_page == "🏠 Beranda":
             </ul>
             </div>
             """, unsafe_allow_html=True)
-    
-    with col_hero2:
-        # Warna Tema Preview
-        st.markdown("### 🎨 Preview Warna Tema")
-        colors_html = """
-        <div style="background: white; padding: 1rem; border-radius: 10px; border: 1px solid #FFE5D9;">
-        <p><strong>Palet Warna Jingga Muda:</strong></p>
-        <div style="display: flex; gap: 5px; margin: 10px 0;">
-            <div style="width: 50px; height: 30px; background: #FF8C42; border-radius: 5px;"></div>
-            <div style="width: 50px; height: 30px; background: #FFB347; border-radius: 5px;"></div>
-            <div style="width: 50px; height: 30px; background: #FF6B21; border-radius: 5px;"></div>
-            <div style="width: 50px; height: 30px; background: #FFE5D9; border-radius: 5px;"></div>
-        </div>
-        <p style="font-size: 0.8rem; color: #666;">
-        #FF8C42 - Warna Primer<br>
-        #FFB347 - Warna Sekunder<br>
-        #FF6B21 - Warna Aksen<br>
-        #FFE5D9 - Background
-        </p>
-        </div>
-        """
-        st.markdown(colors_html, unsafe_allow_html=True)
         
         # Quick Actions
         st.markdown("### ⚡ Quick Actions")
@@ -630,7 +597,7 @@ elif selected_page == "📝 Resume Penelitian":
     progress_bar = st.progress(st.session_state.resume_progress)
     
     # Step Navigation
-    steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "👁️ Preview & Download"]
+    steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "📥 Preview & Download"]
     current_step = st.radio("", steps, horizontal=True, label_visibility="collapsed")
     
     if current_step == steps[0]:
@@ -656,7 +623,7 @@ elif selected_page == "📝 Resume Penelitian":
                 kata_kunci = st.text_input("Kata Kunci (pisahkan dengan koma)", 
                                          placeholder="analisis, kalibrasi, penelitian, ...")
                 kategori = st.selectbox("Kategori Penelitian", 
-                                      ["Skripsi", "Tugas Akhir", "Penelitian Mandiri", "Proyek Kelompok"])
+                                      ["Penelitian Mandiri", "Proyek Kelompok"])
             
             submit_basic = st.form_submit_button("Simpan & Lanjut →", type="primary")
             
@@ -750,7 +717,7 @@ elif selected_page == "📝 Resume Penelitian":
         st.session_state.resume_progress = 100
         progress_bar.progress(100)
         
-        st.markdown("### 👁️ Preview & Download")
+        st.markdown("### 📥 Preview & Download")
         
         if 'resume_data' in st.session_state and st.session_state.resume_data:
             col_preview, col_download = st.columns([2, 1])
@@ -829,16 +796,6 @@ elif selected_page == "📝 Resume Penelitian":
                 # Additional options
                 st.markdown("---")
                 st.markdown("#### 💾 Simpan Data")
-                
-                if st.button("💾 Simpan sebagai JSON", use_container_width=True):
-                    json_str = json.dumps(st.session_state.resume_data, indent=2)
-                    st.download_button(
-                        label="📥 Download JSON",
-                        data=json_str,
-                        file_name="resume_data.json",
-                        mime="application/json",
-                        use_container_width=True
-                    )
                 
                 if st.button("🔄 Reset Form", use_container_width=True):
                     for key in list(st.session_state.keys()):
@@ -1142,9 +1099,9 @@ else:
         
         <h4 style="color: #FF8C42;">✨ Keterangan Web</h4>
         <ul>
-        <li><strong>Aplikasi berbasis web yang dirancang untuk membantu pengguna dalam menyusun resume laporan>
+        <strong>Aplikasi berbasis web yang dirancang untuk membantu pengguna dalam menyusun resume laporan
         <strong>secara sistematis serta memfasilitasi pembuatan kurva kalibrasi secara otomatis, sehingga</strong>
-        <strong>mendukung efisiensi analisis data dan penyusunan laporan ilmiah</strong></li>
+        <strong>mendukung efisiensi analisis data dan penyusunan laporan ilmiah</strong>
         </ul>
         </div>
         """, unsafe_allow_html=True)
