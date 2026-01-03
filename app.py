@@ -275,7 +275,7 @@ def create_resume_pdf(resume_data):
     header_text = f"""
     <para alignment="center">
     <font size="12" color="#FF8C42"><b>NANO RESEARCH</b></font><br/>
-    <font size="10">Politeknik AKA Bogor</font><br/>
+    <font size="10">Kelompok 6 - Politeknik AKA Bogor</font><br/>
     <font size="10">Tahun 2026</font>
     </para>
     """
@@ -292,6 +292,7 @@ def create_resume_pdf(resume_data):
         ["Judul Penelitian", resume_data.get('judul', '')],
         ["Peneliti", resume_data.get('peneliti', '')],
         ["NIM", resume_data.get('nim', '')],
+        ["Kelompok", "6 - AKA Bogor 2026"],
         ["Tanggal", resume_data.get('tanggal', datetime.now().strftime("%d %B %Y"))],
         ["Pembimbing", resume_data.get('pembimbing', '')],
     ]
@@ -467,9 +468,19 @@ with st.sidebar:
     # Menu Navigasi
     selected_page = st.radio(
         "📌 MENU UTAMA",
-        ["🏠 Beranda", "📝 Resume Penelitian", "📈 Kurva Kalibrasi", "👥 Tentang Kelompok 6"],
+        ["🏠 Beranda", "📝 Resume Penelitian", "📈 Kurva Kalibrasi", "👥 Anggota Kelompok"],
         label_visibility="collapsed"
     )
+    
+    st.markdown("---")
+    
+    # Quick Stats
+    st.markdown("### 📊 Statistik Cepat")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Analisis", "18", "+3")
+    with col2:
+        st.metric("Resume", "12", "+2")
     
     st.markdown("---")
     
@@ -502,9 +513,9 @@ if selected_page == "🏠 Beranda":
     
     # Mode Indikator
     if st.session_state.dark_mode:
-        st.info("🌙 **Mode Gelap Aktif** - Tema warna gelap untuk mood malam")
+        st.info("🌙 **Mode Gelap Aktif** - Tema warna disesuaikan untuk pengalaman malam")
     else:
-        st.info("☀️ **Mode Terang Aktif** - Tema warna cerah untuk menyinari harimu!")
+        st.info("☀️ **Mode Terang Aktif** - Tema warna cerah dengan aksen jingga muda")
     
     # Hero Section
     col_hero1, col_hero2 = st.columns([2, 1])
@@ -514,7 +525,7 @@ if selected_page == "🏠 Beranda":
         <div class="info-card">
         <h3 style="color: white; text-align: center;">Selamat Datang di Nano Research!</h3>
         <p style="color: white; text-align: center;">
-        Platform untuk analisis penelitian oleh Kelompok 6. 
+        Platform lengkap untuk analisis penelitian dengan tema **jingga muda** khas Kelompok 6. 
         Dilengkapi dengan mode gelap/terang untuk kenyamanan visual.
         </p>
         </div>
@@ -574,6 +585,28 @@ if selected_page == "🏠 Beranda":
             </ul>
             </div>
             """, unsafe_allow_html=True)
+    
+    with col_hero2:
+        # Warna Tema Preview
+        st.markdown("### 🎨 Preview Warna Tema")
+        colors_html = """
+        <div style="background: white; padding: 1rem; border-radius: 10px; border: 1px solid #FFE5D9;">
+        <p><strong>Palet Warna Jingga Muda:</strong></p>
+        <div style="display: flex; gap: 5px; margin: 10px 0;">
+            <div style="width: 50px; height: 30px; background: #FF8C42; border-radius: 5px;"></div>
+            <div style="width: 50px; height: 30px; background: #FFB347; border-radius: 5px;"></div>
+            <div style="width: 50px; height: 30px; background: #FF6B21; border-radius: 5px;"></div>
+            <div style="width: 50px; height: 30px; background: #FFE5D9; border-radius: 5px;"></div>
+        </div>
+        <p style="font-size: 0.8rem; color: #666;">
+        #FF8C42 - Warna Primer<br>
+        #FFB347 - Warna Sekunder<br>
+        #FF6B21 - Warna Aksen<br>
+        #FFE5D9 - Background
+        </p>
+        </div>
+        """
+        st.markdown(colors_html, unsafe_allow_html=True)
         
         # Quick Actions
         st.markdown("### ⚡ Quick Actions")
@@ -597,7 +630,7 @@ elif selected_page == "📝 Resume Penelitian":
     progress_bar = st.progress(st.session_state.resume_progress)
     
     # Step Navigation
-    steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "📥 Preview & Download"]
+    steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "👁️ Preview & Download"]
     current_step = st.radio("", steps, horizontal=True, label_visibility="collapsed")
     
     if current_step == steps[0]:
@@ -623,7 +656,7 @@ elif selected_page == "📝 Resume Penelitian":
                 kata_kunci = st.text_input("Kata Kunci (pisahkan dengan koma)", 
                                          placeholder="analisis, kalibrasi, penelitian, ...")
                 kategori = st.selectbox("Kategori Penelitian", 
-                                      ["Penelitian Mandiri", "Proyek Kelompok"])
+                                      ["Skripsi", "Tugas Akhir", "Penelitian Mandiri", "Proyek Kelompok"])
             
             submit_basic = st.form_submit_button("Simpan & Lanjut →", type="primary")
             
@@ -717,7 +750,7 @@ elif selected_page == "📝 Resume Penelitian":
         st.session_state.resume_progress = 100
         progress_bar.progress(100)
         
-        st.markdown("### 📥 Preview & Download")
+        st.markdown("### 👁️ Preview & Download")
         
         if 'resume_data' in st.session_state and st.session_state.resume_data:
             col_preview, col_download = st.columns([2, 1])
@@ -784,6 +817,28 @@ elif selected_page == "📝 Resume Penelitian":
                                 mime="application/pdf",
                                 use_container_width=True
                             )
+                            
+                            # PDF Preview
+                            base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
+                            pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="500" type="application/pdf"></iframe>'
+                            st.markdown(pdf_display, unsafe_allow_html=True)
+                            
+                        except Exception as e:
+                            st.error(f"Error membuat PDF: {str(e)}")
+                
+                # Additional options
+                st.markdown("---")
+                st.markdown("#### 💾 Simpan Data")
+                
+                if st.button("💾 Simpan sebagai JSON", use_container_width=True):
+                    json_str = json.dumps(st.session_state.resume_data, indent=2)
+                    st.download_button(
+                        label="📥 Download JSON",
+                        data=json_str,
+                        file_name="resume_data.json",
+                        mime="application/json",
+                        use_container_width=True
+                    )
                 
                 if st.button("🔄 Reset Form", use_container_width=True):
                     for key in list(st.session_state.keys()):
@@ -1079,19 +1134,17 @@ else:
         <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #FFE5D9;">
         <h3 style="color: #FF8C42;">🔬 Tentang Kelompok 6</h3>
         <p>Kelompok 6 terdiri dari 5 anggota yang mengembangkan aplikasi <strong>Nano Research</strong> 
-        sebagai proyek mata kuliah di Politeknik AKA Bogor tahun 2026.</p>
+        sebagai proyek mata kuliah Logika Pemrogramaman Komputer di Politeknik AKA Bogor tahun 2026.</p>
         
         <h4 style="color: #FF8C42;">🎯 Misi Kelompok</h4>
-        <p>Mengembangkan aplikasi analisis penelitian yang mudah 
+        <p>Mengembangkan aplikasi analisis penelitian yang mudah dengan fitur lengkap 
         untuk membantu mahasiswa dalam proses penelitian akademik.</p>
         
-        <h4 style="color: #FF8C42;">✨ 
+        <h4 style="color: #FF8C42;">✨ Keterangan Web</h4>
         <ul>
-        <li><strong>Dias Subarna</strong></li>
-        <li><strong>Grhizzello Auricko Benedict Lamo</strong></li>
-        <li><strong>Liza Nurhalizah</strong></li>
-        <li><strong>Naila Amanda Putri</strong></li>
-        <li><strong>Yudho Pamungkas</strong></li>
+        <li><strong>Aplikasi berbasis web yang dirancang untuk membantu pengguna dalam menyusun resume laporan></li>
+        <li><strong>secara sistematis serta memfasilitasi pembuatan kurva kalibrasi secara otomatis, sehingga</strong></li>
+        <li><strong>mendukung efisiensi analisis data dan penyusunan laporan ilmiah</strong></li>
         </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -1118,13 +1171,99 @@ else:
             </div>
             """, unsafe_allow_html=True)
     
+    # Detail Anggota dalam Tabs
+    st.markdown("---")
+    st.markdown("### 👨‍🔬 Detail Anggota")
+    
+    tabs = st.tabs(members)
+    
+    with tabs[0]:
+        st.markdown("""
+        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FF8C42;">
+        <h4 style="color: #FF8C42;">Dias Subarna</h4>
+        <p><strong>Role:</strong> Project Manager & UI/UX Designer</p>
+        <p><strong>Tanggung Jawab:</strong></p>
+        <ul>
+        <li>Koordinasi tim dan timeline proyek</li>
+        <li>Desain antarmuka pengguna</li>
+        <li>Pengelolaan kebutuhan pengguna</li>
+        <li>Testing usability</li>
+        </ul>
+        <p><strong>Kontak:</strong> dias.subarna@student.aka.ac.id</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with tabs[1]:
+        st.markdown("""
+        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FFB347;">
+        <h4 style="color: #FFB347;">Grhizzello Auricko Benedict Lamo</h4>
+        <p><strong>Role:</strong> Backend Developer</p>
+        <p><strong>Tanggung Jawab:</strong></p>
+        <ul>
+        <li>Pengembangan algoritma analisis data</li>
+        <li>Implementasi fungsi statistik</li>
+        <li>Optimasi performa aplikasi</li>
+        <li>Database management</li>
+        </ul>
+        <p><strong>Kontak:</strong> grhizzello.lamo@student.aka.ac.id</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with tabs[2]:
+        st.markdown("""
+        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FF6B21;">
+        <h4 style="color: #FF6B21;">Liza Nurhalizah</h4>
+        <p><strong>Role:</strong> Data Analyst & Tester</p>
+        <p><strong>Tanggung Jawab:</strong></p>
+        <ul>
+        <li>Validasi algoritma statistik</li>
+        <li>Testing fungsi aplikasi</li>
+        <li>Analisis kebutuhan data pengguna</li>
+        <li>Quality assurance</li>
+        </ul>
+        <p><strong>Kontak:</strong> liza.nurhalizah@student.aka.ac.id</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with tabs[3]:
+        st.markdown("""
+        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FF8C42;">
+        <h4 style="color: #FF8C42;">Naila Amanda Putri</h4>
+        <p><strong>Role:</strong> Documentation & Quality Assurance</p>
+        <p><strong>Tanggung Jawab:</strong></p>
+        <ul>
+        <li>Penulisan dokumentasi teknis</li>
+        <li>Pembuatan user manual</li>
+        <li>Quality control produk</li>
+        <li>Report generation</li>
+        </ul>
+        <p><strong>Kontak:</strong> naila.putri@student.aka.ac.id</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with tabs[4]:
+        st.markdown("""
+        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FFB347;">
+        <h4 style="color: #FFB347;">Yudho Pamungkas</h4>
+        <p><strong>Role:</strong> Frontend Developer & Deployment</p>
+        <p><strong>Tanggung Jawab:</strong></p>
+        <ul>
+        <li>Implementasi UI/UX design</li>
+        <li>Responsive web development</li>
+        <li>Deployment aplikasi</li>
+        <li>Maintenance server</li>
+        </ul>
+        <p><strong>Kontak:</strong> yudho.pamungkas@student.aka.ac.id</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
     # Timeline Proyek
     st.markdown("---")
     st.markdown("### 📅 Timeline Pengembangan")
     
     timeline_data = {
         'Fase': ['Perencanaan', 'Pengembangan', 'Testing', 'Presentasi'],
-        'Bulan': ['Des 2025', 'Des 2025', 'Januari 2026', '8 Januari 2026'],
+        'Bulan': ['Des 2025', 'Des 2025', 'Jan 2026', '8 Jan 2026'],
         'Status': ['✓ Selesai', '✓ Selesai', '✓ Selesai', '🔄 Berjalan']
     }
     
