@@ -474,16 +474,6 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Quick Stats
-    st.markdown("### 📊 Statistik Cepat")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Analisis", "18", "+3")
-    with col2:
-        st.metric("Resume", "12", "+2")
-    
-    st.markdown("---")
-    
     # Tips
     with st.expander("💡 Tips Cepat"):
         st.info("""
