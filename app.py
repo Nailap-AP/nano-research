@@ -1109,11 +1109,11 @@ else:
         <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #E0E0E0;">
         <h3 style="color: #0066CC;">🔬 Nano Research</h3>
         <p>Aplikasi web ini dikembangkan oleh <strong>Kelompok 6</strong> dari <strong> Prodi D4 Politeknik AKA Bogor</strong> 
-        sebagai bagian dari proyek mata kuliah Logika dan Pemrograman Komputer Tahun 2026.</p>
+        sebagai bagian dari proyek mata kuliah Logika dan Pemrograman Komputer.</p>
         
         <h4>🎯 Misi Kami</h4>
-        <p>Menyediakan tools analisis penelitian yang mudah digunakan, akurat, dan profesional 
-        untuk mendukung kegiatan akademik dan penelitian di lingkungan Politeknik AKA Bogor.</p>
+        <p>Menyediakan tools analisis penelitian yang mudah digunakan 
+        untuk mendukung kegiatan akademik dan penelitian di Politeknik AKA Bogor.</p>
         
         <h4>✨ Fitur Unggulan</h4>
         <ul>
@@ -1127,10 +1127,6 @@ else:
         <p>Aplikasi ini dibangun dengan:</p>
         <ul>
         <li><strong>Streamlit</strong> - Framework web aplikasi Python</li>
-        <li><strong>Plotly & Matplotlib</strong> - Visualisasi data interaktif</li>
-        <li><strong>Pandas & NumPy</strong> - Manipulasi dan analisis data</li>
-        <li><strong>SciPy</strong> - Analisis statistik</li>
-        <li><strong>ReportLab</strong> - Generasi PDF</li>
         </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -1163,9 +1159,9 @@ else:
     st.markdown("### 📅 Timeline Pengembangan")
     
     timeline_data = {
-        'Fase': ['Perencanaan', 'Pengembangan', 'Testing', 'Deployment'],
-        'Bulan': ['Jan 2026', 'Feb-Mar 2026', 'Apr 2026', 'Mei 2026'],
-        'Status': ['✓ Selesai', '✓ Selesai', '🔄 Berjalan', '⏳ Menunggu']
+        'Fase': ['Perencanaan', 'Pengembangan', 'Presentasi'],
+        'Bulan': ['Des 2025', 'Des 2025', 'Jan 2026'],
+        'Status': ['✓ Selesai', '✓ Selesai', '🔄 Berjalan']
     }
     
     df_timeline = pd.DataFrame(timeline_data)
@@ -1191,7 +1187,6 @@ st.markdown("""
 <p>
 🔬 <strong>Nano Research</strong> - Aplikasi Analisis Penelitian<br>
 Dikembangkan oleh Kelompok 6 - Politeknik AKA Bogor © 2026<br>
-<a href="https://github.com/kelompok6-aka/nano-research" style="color: #0066CC;">GitHub Repository</a> | 
 <a href="#" style="color: #0066CC;">Documentation</a> | 
 <a href="#" style="color: #0066CC;">Report Issue</a>
 </p>
