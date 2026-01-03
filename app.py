@@ -513,9 +513,9 @@ if selected_page == "🏠 Beranda":
     
     # Mode Indikator
     if st.session_state.dark_mode:
-        st.info("🌙 **Mode Gelap Aktif** - Tema warna disesuaikan untuk pengalaman malam")
+        st.info("🌙 **Mode Gelap Aktif** - Tema warna gelap untuk mood malam")
     else:
-        st.info("☀️ **Mode Terang Aktif** - Tema warna cerah dengan aksen jingga muda")
+        st.info("☀️ **Mode Terang Aktif** - Tema warna cerah untuk menyinari harimu!")
     
     # Hero Section
     col_hero1, col_hero2 = st.columns([2, 1])
@@ -728,7 +728,7 @@ elif selected_page == "📝 Resume Penelitian":
         st.session_state.resume_progress = 100
         progress_bar.progress(100)
         
-        st.markdown("### 👁️ Preview & Download")
+        st.markdown("### 📥 Preview & Download")
         
         if 'resume_data' in st.session_state and st.session_state.resume_data:
             col_preview, col_download = st.columns([2, 1])
@@ -1115,8 +1115,8 @@ else:
         sebagai proyek mata kuliah di Politeknik AKA Bogor tahun 2026.</p>
         
         <h4 style="color: #FF8C42;">🎯 Misi Kelompok</h4>
-        <p>Mengembangkan aplikasi analisis penelitian yang user-friendly dengan fitur lengkap 
-        untuk membantu mahasiswa dan peneliti dalam proses penelitian akademik.</p>
+        <p>Mengembangkan aplikasi analisis penelitian yang mudah 
+        untuk membantu mahasiswa dalam proses penelitian akademik.</p>
         
         <h4 style="color: #FF8C42;">✨ 
         <ul>
