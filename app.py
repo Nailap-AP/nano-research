@@ -785,28 +785,6 @@ elif selected_page == "📝 Resume Penelitian":
                                 mime="application/pdf",
                                 use_container_width=True
                             )
-                            
-                            # PDF Preview
-                            base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
-                            pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="500" type="application/pdf"></iframe>'
-                            st.markdown(pdf_display, unsafe_allow_html=True)
-                            
-                        except Exception as e:
-                            st.error(f"Error membuat PDF: {str(e)}")
-                
-                # Additional options
-                st.markdown("---")
-                st.markdown("#### 💾 Simpan Data")
-                
-                if st.button("💾 Simpan sebagai JSON", use_container_width=True):
-                    json_str = json.dumps(st.session_state.resume_data, indent=2)
-                    st.download_button(
-                        label="📥 Download JSON",
-                        data=json_str,
-                        file_name="resume_data.json",
-                        mime="application/json",
-                        use_container_width=True
-                    )
                 
                 if st.button("🔄 Reset Form", use_container_width=True):
                     for key in list(st.session_state.keys()):
