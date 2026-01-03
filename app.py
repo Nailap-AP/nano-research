@@ -1142,9 +1142,9 @@ else:
         
         <h4 style="color: #FF8C42;">✨ Keterangan Web</h4>
         <ul>
-        <li><strong>Aplikasi berbasis web yang dirancang untuk membantu pengguna dalam menyusun resume laporan></li>
-        <li><strong>secara sistematis serta memfasilitasi pembuatan kurva kalibrasi secara otomatis, sehingga</strong></li>
-        <li><strong>mendukung efisiensi analisis data dan penyusunan laporan ilmiah</strong></li>
+        <li><strong>Aplikasi berbasis web yang dirancang untuk membantu pengguna dalam menyusun resume laporan>
+        <strong>secara sistematis serta memfasilitasi pembuatan kurva kalibrasi secara otomatis, sehingga</strong>
+        <strong>mendukung efisiensi analisis data dan penyusunan laporan ilmiah</strong></li>
         </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -1170,92 +1170,6 @@ else:
             </p>
             </div>
             """, unsafe_allow_html=True)
-    
-    # Detail Anggota dalam Tabs
-    st.markdown("---")
-    st.markdown("### 👨‍🔬 Detail Anggota")
-    
-    tabs = st.tabs(members)
-    
-    with tabs[0]:
-        st.markdown("""
-        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FF8C42;">
-        <h4 style="color: #FF8C42;">Dias Subarna</h4>
-        <p><strong>Role:</strong> Project Manager & UI/UX Designer</p>
-        <p><strong>Tanggung Jawab:</strong></p>
-        <ul>
-        <li>Koordinasi tim dan timeline proyek</li>
-        <li>Desain antarmuka pengguna</li>
-        <li>Pengelolaan kebutuhan pengguna</li>
-        <li>Testing usability</li>
-        </ul>
-        <p><strong>Kontak:</strong> dias.subarna@student.aka.ac.id</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with tabs[1]:
-        st.markdown("""
-        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FFB347;">
-        <h4 style="color: #FFB347;">Grhizzello Auricko Benedict Lamo</h4>
-        <p><strong>Role:</strong> Backend Developer</p>
-        <p><strong>Tanggung Jawab:</strong></p>
-        <ul>
-        <li>Pengembangan algoritma analisis data</li>
-        <li>Implementasi fungsi statistik</li>
-        <li>Optimasi performa aplikasi</li>
-        <li>Database management</li>
-        </ul>
-        <p><strong>Kontak:</strong> grhizzello.lamo@student.aka.ac.id</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with tabs[2]:
-        st.markdown("""
-        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FF6B21;">
-        <h4 style="color: #FF6B21;">Liza Nurhalizah</h4>
-        <p><strong>Role:</strong> Data Analyst & Tester</p>
-        <p><strong>Tanggung Jawab:</strong></p>
-        <ul>
-        <li>Validasi algoritma statistik</li>
-        <li>Testing fungsi aplikasi</li>
-        <li>Analisis kebutuhan data pengguna</li>
-        <li>Quality assurance</li>
-        </ul>
-        <p><strong>Kontak:</strong> liza.nurhalizah@student.aka.ac.id</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with tabs[3]:
-        st.markdown("""
-        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FF8C42;">
-        <h4 style="color: #FF8C42;">Naila Amanda Putri</h4>
-        <p><strong>Role:</strong> Documentation & Quality Assurance</p>
-        <p><strong>Tanggung Jawab:</strong></p>
-        <ul>
-        <li>Penulisan dokumentasi teknis</li>
-        <li>Pembuatan user manual</li>
-        <li>Quality control produk</li>
-        <li>Report generation</li>
-        </ul>
-        <p><strong>Kontak:</strong> naila.putri@student.aka.ac.id</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with tabs[4]:
-        st.markdown("""
-        <div style="background: #FFF5EE; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #FFB347;">
-        <h4 style="color: #FFB347;">Yudho Pamungkas</h4>
-        <p><strong>Role:</strong> Frontend Developer & Deployment</p>
-        <p><strong>Tanggung Jawab:</strong></p>
-        <ul>
-        <li>Implementasi UI/UX design</li>
-        <li>Responsive web development</li>
-        <li>Deployment aplikasi</li>
-        <li>Maintenance server</li>
-        </ul>
-        <p><strong>Kontak:</strong> yudho.pamungkas@student.aka.ac.id</p>
-        </div>
-        """, unsafe_allow_html=True)
     
     # Timeline Proyek
     st.markdown("---")
