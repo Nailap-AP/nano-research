@@ -17,3 +17,5 @@ Aplikasi web untuk membuat, menyimpan, dan mendeploy resume laporan penelitian d
 ```bash
 git clone https://github.com/username/resume-penelitian.git
 cd resume-penelitian
+pip install -r requirements.txt
+streamlit run app.py
