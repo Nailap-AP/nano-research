@@ -1,10 +1,17 @@
 # 🔬 Nano Research - Aplikasi Analisis Penelitian
 
-![Nano Research Banner](https://via.placeholder.com/800x200/0066CC/FFFFFF?text=NANO+RESEARCH+-+Kelompok+6+AKA+Bogor+2026)
+![Nano Research](https://via.placeholder.com/800x200/0066CC/FFFFFF?text=NANO+RESEARCH+-+Kelompok+6+AKA+Bogor+2026)
 
-Aplikasi web modern untuk analisis penelitian yang dikembangkan oleh **Kelompok 6 D4 Politeknik AKA Bogor Tahun 2026**.
+Aplikasi web untuk analisis penelitian yang dikembangkan oleh **Kelompok 6 D4 Politeknik AKA Bogor Tahun 2026**.
 
-## 🎯 Fitur Utama
+## 👥 Anggota Kelompok 6
+1. **Dias Subarna** 
+2. **Grhizzello Auricko Benedict Lamo** 
+3. **Liza Nurhalizah** 
+4. **Naila Amanda Putri** 
+5. **Yudho Pamungkas** 
+
+## ✨ Fitur Utama
 
 ### 📝 Resume Penelitian
 - Form input terstruktur untuk data penelitian
@@ -18,11 +25,11 @@ Aplikasi web modern untuk analisis penelitian yang dikembangkan oleh **Kelompok 
 - Grafik interaktif dengan Plotly
 - Export hasil dalam multiple format (PNG, CSV, PDF)
 
-### ✨ UI Modern
+### 🎨 UI Modern
+- **Mode Dark/Light** - Toggle tema sesuai preferensi
 - Desain clean dan professional
 - Warna khas Kelompok 6 (Biru AKA)
 - Responsive untuk semua device
-- User-friendly interface
 
 ## 🚀 Cara Menjalankan
 
