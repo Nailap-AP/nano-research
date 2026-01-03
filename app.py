@@ -292,7 +292,7 @@ def create_resume_pdf(resume_data):
         ["Judul Penelitian", resume_data.get('judul', '')],
         ["Peneliti", resume_data.get('peneliti', '')],
         ["NIM", resume_data.get('nim', '')],
-        ["Kelompok", "6 - AKA Bogor 2026"],
+        ["Kelompok", resume_data.get('kelompok', '')],
         ["Tanggal", resume_data.get('tanggal', datetime.now().strftime("%d %B %Y"))],
         ["Pembimbing", resume_data.get('pembimbing', '')],
     ]
@@ -525,7 +525,7 @@ if selected_page == "🏠 Beranda":
         <div class="info-card">
         <h3 style="color: white; text-align: center;">Selamat Datang di Nano Research!</h3>
         <p style="color: white; text-align: center;">
-        Platform lengkap untuk analisis penelitian dengan tema **jingga muda** khas Kelompok 6. 
+        Platform untuk analisis penelitian oleh Kelompok 6. 
         Dilengkapi dengan mode gelap/terang untuk kenyamanan visual.
         </p>
         </div>
@@ -585,28 +585,6 @@ if selected_page == "🏠 Beranda":
             </ul>
             </div>
             """, unsafe_allow_html=True)
-    
-    with col_hero2:
-        # Warna Tema Preview
-        st.markdown("### 🎨 Preview Warna Tema")
-        colors_html = """
-        <div style="background: white; padding: 1rem; border-radius: 10px; border: 1px solid #FFE5D9;">
-        <p><strong>Palet Warna Jingga Muda:</strong></p>
-        <div style="display: flex; gap: 5px; margin: 10px 0;">
-            <div style="width: 50px; height: 30px; background: #FF8C42; border-radius: 5px;"></div>
-            <div style="width: 50px; height: 30px; background: #FFB347; border-radius: 5px;"></div>
-            <div style="width: 50px; height: 30px; background: #FF6B21; border-radius: 5px;"></div>
-            <div style="width: 50px; height: 30px; background: #FFE5D9; border-radius: 5px;"></div>
-        </div>
-        <p style="font-size: 0.8rem; color: #666;">
-        #FF8C42 - Warna Primer<br>
-        #FFB347 - Warna Sekunder<br>
-        #FF6B21 - Warna Aksen<br>
-        #FFE5D9 - Background
-        </p>
-        </div>
-        """
-        st.markdown(colors_html, unsafe_allow_html=True)
         
         # Quick Actions
         st.markdown("### ⚡ Quick Actions")
@@ -630,7 +608,7 @@ elif selected_page == "📝 Resume Penelitian":
     progress_bar = st.progress(st.session_state.resume_progress)
     
     # Step Navigation
-    steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "👁️ Preview & Download"]
+    steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "📥 Preview & Download"]
     current_step = st.radio("", steps, horizontal=True, label_visibility="collapsed")
     
     if current_step == steps[0]:
@@ -656,7 +634,7 @@ elif selected_page == "📝 Resume Penelitian":
                 kata_kunci = st.text_input("Kata Kunci (pisahkan dengan koma)", 
                                          placeholder="analisis, kalibrasi, penelitian, ...")
                 kategori = st.selectbox("Kategori Penelitian", 
-                                      ["Skripsi", "Tugas Akhir", "Penelitian Mandiri", "Proyek Kelompok"])
+                                      ["Penelitian Mandiri", "Proyek Kelompok"])
             
             submit_basic = st.form_submit_button("Simpan & Lanjut →", type="primary")
             
