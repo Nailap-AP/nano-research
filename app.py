@@ -6,7 +6,6 @@ import seaborn as sns
 from scipy import stats
 import plotly.graph_objects as go
 import plotly.express as px
-from plotly.subplots import make_subplots
 import io
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.pdfgen import canvas
@@ -20,9 +19,21 @@ import base64
 from datetime import datetime
 import json
 import time
-from PIL import Image as PILImage
 import warnings
 warnings.filterwarnings('ignore')
+
+# ===================== INISIALISASI SESSION STATE =====================
+if 'theme' not in st.session_state:
+    st.session_state.theme = 'light'
+
+if 'resume_data' not in st.session_state:
+    st.session_state.resume_data = {}
+
+if 'x_data' not in st.session_state:
+    st.session_state.x_data = []
+
+if 'y_data' not in st.session_state:
+    st.session_state.y_data = []
 
 # ===================== KONFIGURASI APLIKASI =====================
 st.set_page_config(
@@ -42,167 +53,223 @@ st.set_page_config(
 )
 
 # ===================== CSS CUSTOM STYLING =====================
-def local_css():
-    st.markdown("""
-    <style>
-    /* Header Styling */
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: 800;
-        background: linear-gradient(90deg, #0066CC 0%, #00B3B3 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-align: center;
-        margin-bottom: 0.5rem;
-    }
-    
-    .sub-header {
-        font-size: 1.2rem;
-        color: #0066CC;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    
-    /* Card Styling */
-    .feature-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border: 1px solid #E0E0E0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        margin: 1rem 0;
-        transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,102,204,0.2);
-    }
-    
-    .info-card {
-        background: linear-gradient(135deg, #0066CC 0%, #00B3B3 100%);
-        padding: 1.5rem;
-        border-radius: 10px;
-        color: white;
-        margin: 1rem 0;
-    }
-    
-    /* Button Styling */
-    .stButton > button {
-        background: linear-gradient(90deg, #0066CC 0%, #00B3B3 100%);
-        color: white;
-        border: none;
-        padding: 0.5rem 1.5rem;
-        border-radius: 5px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .stButton > button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 3px 10px rgba(0,102,204,0.3);
-    }
-    
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0066CC 0%, #004C99 100%);
-    }
-    
-    [data-testid="stSidebar"] h1, 
-    [data-testid="stSidebar"] h2, 
-    [data-testid="stSidebar"] h3 {
-        color: white !important;
-    }
-    
-    /* Tab Styling */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: #F0F2F6;
-        padding: 5px;
-        border-radius: 5px;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: white;
-        border-radius: 5px;
-        padding: 10px 20px;
-        font-weight: 600;
-        color: #0066CC;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background: #0066CC !important;
-        color: white !important;
-    }
-    
-    /* Progress Bar */
-    .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #0066CC 0%, #00B3B3 100%);
-    }
-    
-    /* Success/Error Messages */
-    .success-message {
-        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
-        padding: 1rem;
-        border-radius: 5px;
-        color: white;
-        margin: 1rem 0;
-    }
-    
-    /* Custom Radio Buttons */
-    .stRadio > div {
-        flex-direction: row;
-        align-items: center;
-    }
-    
-    .stRadio label {
-        margin-right: 20px;
-    }
-    
-    /* Hide Streamlit Branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
-    /* Custom Footer */
-    .custom-footer {
-        text-align: center;
-        padding: 1rem;
-        margin-top: 2rem;
-        border-top: 1px solid #E0E0E0;
-        color: #666;
-        font-size: 0.9rem;
-    }
-    
-    /* Animation */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .fade-in {
-        animation: fadeIn 0.5s ease-out;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# Panggil CSS
-local_css()
+def get_css_theme():
+    if st.session_state.theme == 'dark':
+        return """
+        <style>
+        /* Dark Theme */
+        .stApp {
+            background-color: #0E1117;
+        }
+        
+        .main-header {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #4F8BF9 0%, #00B3B3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sub-header {
+            font-size: 1.2rem;
+            color: #4F8BF9;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background: #262730;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #444;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(79,139,249,0.2);
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #4F8BF9 0%, #00B3B3 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            color: white;
+            margin: 1rem 0;
+        }
+        
+        /* Button Styling */
+        .stButton > button {
+            background: linear-gradient(90deg, #4F8BF9 0%, #00B3B3 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .stButton > button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(79,139,249,0.3);
+        }
+        
+        /* Sidebar Styling */
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #1E1E2E 0%, #2D2D44 100%);
+        }
+        
+        /* Tab Styling */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 8px;
+            background: #262730;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
+            background: #1E1E2E;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-weight: 600;
+            color: #4F8BF9;
+        }
+        
+        .stTabs [aria-selected="true"] {
+            background: #4F8BF9 !important;
+            color: white !important;
+        }
+        
+        /* Custom Footer */
+        .custom-footer {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-top: 1px solid #444;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        </style>
+        """
+    else:
+        return """
+        <style>
+        /* Light Theme */
+        .stApp {
+            background-color: #FFFFFF;
+        }
+        
+        .main-header {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #0066CC 0%, #00B3B3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sub-header {
+            font-size: 1.2rem;
+            color: #0066CC;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #E0E0E0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,102,204,0.2);
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #0066CC 0%, #00B3B3 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            color: white;
+            margin: 1rem 0;
+        }
+        
+        /* Button Styling */
+        .stButton > button {
+            background: linear-gradient(90deg, #0066CC 0%, #00B3B3 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .stButton > button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(0,102,204,0.3);
+        }
+        
+        /* Sidebar Styling */
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #0066CC 0%, #004C99 100%);
+        }
+        
+        /* Tab Styling */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 8px;
+            background: #F0F2F6;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
+            background: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-weight: 600;
+            color: #0066CC;
+        }
+        
+        .stTabs [aria-selected="true"] {
+            background: #0066CC !important;
+            color: white !important;
+        }
+        
+        /* Custom Footer */
+        .custom-footer {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-top: 1px solid #E0E0E0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        </style>
+        """
 
 # ===================== FUNGSI UTAMA =====================
 
 def create_resume_pdf(resume_data):
     """Membuat file PDF dari data resume"""
-    # Buat file temporary
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
     pdf_path = temp_file.name
     
-    # Buat dokumen PDF
     doc = SimpleDocTemplate(pdf_path, pagesize=A4)
     styles = getSampleStyleSheet()
     
-    # Custom styles
     title_style = ParagraphStyle(
         'CustomTitle',
         parent=styles['Heading1'],
@@ -229,10 +296,9 @@ def create_resume_pdf(resume_data):
         spaceAfter=5
     )
     
-    # Kumpulkan konten
     content = []
     
-    # Header dengan watermark kelompok
+    # Header
     header_text = f"""
     <para alignment="center">
     <font size="12" color="#0066CC"><b>NANO RESEARCH</b></font><br/>
@@ -243,7 +309,7 @@ def create_resume_pdf(resume_data):
     content.append(Paragraph(header_text, title_style))
     content.append(Spacer(1, 20))
     
-    # Judul Penelitian
+    # Judul
     content.append(Paragraph(f"<b>RESUME PENELITIAN</b>", title_style))
     content.append(Spacer(1, 10))
     
@@ -315,13 +381,11 @@ def create_resume_pdf(resume_data):
     <para alignment="center">
     <font size="9" color="#666666">
     Generated by Nano Research App - Kelompok 6 AKA Bogor 2026<br/>
-    https://github.com/kelompok6-aka/nano-research
     </font>
     </para>
     """
     content.append(Paragraph(footer_text, normal_style))
     
-    # Build PDF
     doc.build(content)
     return pdf_path
 
@@ -330,46 +394,60 @@ def analyze_calibration_curve(x_data, y_data):
     x = np.array(x_data)
     y = np.array(y_data)
     
-    # Hitung regresi linear
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
     r_squared = r_value ** 2
-    
-    # Prediksi Y
     y_pred = intercept + slope * x
     
     # Buat plot dengan matplotlib
     fig, ax = plt.subplots(figsize=(10, 6))
     
-    # Plot data
-    ax.scatter(x, y, color='#0066CC', s=80, alpha=0.8, label='Data Aktual', edgecolors='white', linewidth=1)
-    ax.plot(x, y_pred, color='#FF6B6B', linewidth=3, label=f'Regresi: y = {intercept:.4f} + {slope:.4f}x')
+    if st.session_state.theme == 'dark':
+        plt.style.use('dark_background')
+        color_point = '#4F8BF9'
+        color_line = '#FF6B6B'
+        bg_color = 'none'
+    else:
+        color_point = '#0066CC'
+        color_line = '#FF6B6B'
+        bg_color = 'white'
     
-    # Plot confidence interval
-    n = len(x)
-    y_err = 1.96 * std_err * np.sqrt(1/n + (x - np.mean(x))**2 / np.sum((x - np.mean(x))**2))
-    ax.fill_between(x, y_pred - y_err, y_pred + y_err, color='#FF6B6B', alpha=0.2, label='95% Confidence Interval')
+    ax.scatter(x, y, color=color_point, s=80, alpha=0.8, label='Data Aktual', 
+               edgecolors='white' if st.session_state.theme == 'dark' else 'black', linewidth=1)
+    ax.plot(x, y_pred, color=color_line, linewidth=3, label=f'Regresi: y = {intercept:.4f} + {slope:.4f}x')
     
     # Styling plot
     ax.grid(True, alpha=0.3, linestyle='--')
     ax.set_xlabel('Konsentrasi (X)', fontsize=12, fontweight='bold')
     ax.set_ylabel('Respons (Y)', fontsize=12, fontweight='bold')
-    ax.set_title('Kurva Kalibrasi - Nano Research', fontsize=14, fontweight='bold', color='#0066CC')
+    ax.set_title('Kurva Kalibrasi - Nano Research', fontsize=14, fontweight='bold', 
+                color=color_point if st.session_state.theme == 'light' else color_line)
     ax.legend(loc='best')
+    ax.set_facecolor(bg_color)
+    fig.patch.set_facecolor(bg_color)
     
-    # Tambah informasi statistik di plot
-    stats_text = f'y = {intercept:.4f} + {slope:.4f}x\nR² = {r_squared:.4f}\nn = {n}'
+    # Tambah informasi statistik
+    stats_text = f'y = {intercept:.4f} + {slope:.4f}x\nR² = {r_squared:.4f}\nn = {len(x)}'
     ax.text(0.02, 0.98, stats_text, transform=ax.transAxes, fontsize=10,
-            verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+            verticalalignment='top', 
+            bbox=dict(boxstyle='round', facecolor='white' if st.session_state.theme == 'light' else '#2D2D44', 
+                     alpha=0.8))
     
     plt.tight_layout()
     
-    # Buat juga plot interaktif dengan Plotly
+    # Plot interaktif dengan Plotly
+    if st.session_state.theme == 'dark':
+        plot_template = 'plotly_dark'
+        color_point_plotly = '#4F8BF9'
+    else:
+        plot_template = 'plotly_white'
+        color_point_plotly = '#0066CC'
+    
     fig_interactive = go.Figure()
     
     fig_interactive.add_trace(go.Scatter(
         x=x, y=y, mode='markers',
         name='Data Aktual',
-        marker=dict(size=10, color='#0066CC'),
+        marker=dict(size=10, color=color_point_plotly),
         hovertemplate='<b>X</b>: %{x:.4f}<br><b>Y</b>: %{y:.4f}<extra></extra>'
     ))
     
@@ -385,13 +463,15 @@ def analyze_calibration_curve(x_data, y_data):
         xaxis_title='Konsentrasi (X)',
         yaxis_title='Respons (Y)',
         hovermode='closest',
-        plot_bgcolor='white',
+        template=plot_template,
         height=500,
         legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
     )
     
-    fig_interactive.update_xaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
-    fig_interactive.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    fig_interactive.update_xaxes(showgrid=True, gridwidth=1, 
+                                 gridcolor='lightgray' if st.session_state.theme == 'light' else '#444')
+    fig_interactive.update_yaxes(showgrid=True, gridwidth=1, 
+                                 gridcolor='lightgray' if st.session_state.theme == 'light' else '#444')
     
     return {
         'slope': slope,
@@ -400,7 +480,7 @@ def analyze_calibration_curve(x_data, y_data):
         'r_value': r_value,
         'std_err': std_err,
         'p_value': p_value,
-        'n': n,
+        'n': len(x),
         'fig_matplotlib': fig,
         'fig_interactive': fig_interactive,
         'equation': f'y = {intercept:.4f} + {slope:.4f}x'
@@ -408,6 +488,18 @@ def analyze_calibration_curve(x_data, y_data):
 
 # ===================== SIDEBAR =====================
 with st.sidebar:
+    # Toggle Theme
+    col_theme1, col_theme2 = st.columns([3, 1])
+    with col_theme1:
+        st.markdown("### 🌓 Tema Aplikasi")
+    with col_theme2:
+        theme_toggle = st.toggle("", value=st.session_state.theme == 'dark', 
+                                label_visibility="collapsed")
+        if theme_toggle:
+            st.session_state.theme = 'dark'
+        else:
+            st.session_state.theme = 'light'
+    
     st.markdown("""
     <div style="text-align: center; padding: 1rem 0;">
         <h1 style="color: white; font-size: 2rem;">🔬</h1>
@@ -423,13 +515,13 @@ with st.sidebar:
     # Menu Navigasi
     selected_page = st.radio(
         "📌 MENU UTAMA",
-        ["🏠 Beranda", "📝 Resume Penelitian", "📈 Kurva Kalibrasi", "👥 Tentang Kami"],
+        ["🏠 Beranda", "📝 Resume Penelitian", "📈 Kurva Kalibrasi", "👥 Anggota Kelompok"],
         label_visibility="collapsed"
     )
     
     st.markdown("---")
     
-    # Informasi Quick Stats
+    # Quick Stats
     st.markdown("### 📊 Quick Stats")
     col1, col2 = st.columns(2)
     with col1:
@@ -439,7 +531,7 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Tips
+    # Quick Tips
     with st.expander("💡 Tips Cepat"):
         st.info("""
         1. Simpan data Anda secara berkala
@@ -458,9 +550,11 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
+# ===================== APLIKASI CSS =====================
+st.markdown(get_css_theme(), unsafe_allow_html=True)
+
 # ===================== HALAMAN BERANDA =====================
 if selected_page == "🏠 Beranda":
-    # Header dengan animasi
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown('<h1 class="main-header">🔬 NANO RESEARCH</h1>', unsafe_allow_html=True)
@@ -540,19 +634,12 @@ if selected_page == "🏠 Beranda":
     with col_start1:
         if st.button("📝 Buat Resume Baru", use_container_width=True):
             st.session_state.page = "resume"
-            st.rerun()
     with col_start2:
         if st.button("📈 Analisis Kurva", use_container_width=True):
             st.session_state.page = "kurva"
-            st.rerun()
     with col_start3:
-        if st.button("📚 Panduan Penggunaan", use_container_width=True):
-            st.info("""
-            ### Panduan Singkat:
-            1. **Resume Penelitian**: Isi form, preview, download PDF
-            2. **Kurva Kalibrasi**: Input data, analisis, simpan hasil
-            3. **Data Management**: Simpan sebagai CSV atau PDF
-            """)
+        if st.button("👥 Lihat Anggota", use_container_width=True):
+            st.session_state.page = "anggota"
     
     # Demo Preview
     st.markdown("---")
@@ -561,8 +648,15 @@ if selected_page == "🏠 Beranda":
     tab_demo1, tab_demo2 = st.tabs(["Demo Resume", "Demo Kurva"])
     
     with tab_demo1:
-        st.image("https://via.placeholder.com/800x400/0066CC/FFFFFF?text=Preview+Resume+Penelitian", 
-                caption="Tampilan Resume Penelitian")
+        st.markdown("""
+        <div style="padding: 2rem; background-color: #f5f5f5; border-radius: 10px;">
+        <h4 style="color: #0066CC;">Contoh Format Resume:</h4>
+        <p><strong>Judul:</strong> Analisis Kurva Kalibrasi Metode Spektrofotometri</p>
+        <p><strong>Peneliti:</strong> Dias Subarna</p>
+        <p><strong>Tujuan:</strong> Menentukan linearitas metode analisis...</p>
+        <p><strong>Hasil:</strong> R² = 0.998, menunjukkan hubungan linear yang baik...</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     with tab_demo2:
         # Generate sample plot
@@ -570,7 +664,14 @@ if selected_page == "🏠 Beranda":
         y_demo = 2.5 * x_demo + 1.2 + np.random.normal(0, 0.5, 20)
         
         fig_demo, ax_demo = plt.subplots(figsize=(10, 4))
-        ax_demo.scatter(x_demo, y_demo, color='#0066CC')
+        
+        if st.session_state.theme == 'dark':
+            plt.style.use('dark_background')
+            color_demo = '#4F8BF9'
+        else:
+            color_demo = '#0066CC'
+        
+        ax_demo.scatter(x_demo, y_demo, color=color_demo)
         
         slope, intercept = np.polyfit(x_demo, y_demo, 1)
         ax_demo.plot(x_demo, slope*x_demo + intercept, color='#FF6B6B')
@@ -587,18 +688,11 @@ elif selected_page == "📝 Resume Penelitian":
     st.markdown('<h1 class="main-header">📝 Resume Penelitian</h1>', unsafe_allow_html=True)
     st.markdown('<p class="sub-header">Buat resume penelitian profesional dengan format standar</p>', unsafe_allow_html=True)
     
-    # Progress Indicator
-    progress_value = st.session_state.get('resume_progress', 0)
-    progress_bar = st.progress(progress_value)
-    
     # Step Navigation
     steps = ["📋 Informasi Dasar", "📝 Konten Penelitian", "👁️ Preview & Download"]
     current_step = st.radio("", steps, horizontal=True, label_visibility="collapsed")
     
     if current_step == steps[0]:
-        st.session_state.resume_progress = 33
-        progress_bar.progress(33)
-        
         st.markdown("### 📋 Informasi Dasar Penelitian")
         
         with st.form("basic_info_form"):
@@ -641,14 +735,7 @@ elif selected_page == "📝 Resume Penelitian":
                     st.error("Harap isi semua field yang wajib (*)")
     
     elif current_step == steps[1]:
-        st.session_state.resume_progress = 66
-        progress_bar.progress(66)
-        
         st.markdown("### 📝 Konten Penelitian")
-        
-        # Inisialisasi session state jika belum ada
-        if 'resume_data' not in st.session_state:
-            st.session_state.resume_data = {}
         
         with st.form("content_form"):
             # Latar Belakang
@@ -710,9 +797,6 @@ elif selected_page == "📝 Resume Penelitian":
                 st.rerun()
     
     else:  # Step 3: Preview & Download
-        st.session_state.resume_progress = 100
-        progress_bar.progress(100)
-        
         st.markdown("### 👁️ Preview & Download")
         
         if 'resume_data' in st.session_state and st.session_state.resume_data:
@@ -721,14 +805,22 @@ elif selected_page == "📝 Resume Penelitian":
             with col_preview:
                 st.markdown("#### 📄 Preview Resume")
                 
-                # Display preview in a nice box
                 data = st.session_state.resume_data
                 
                 with st.container():
+                    if st.session_state.theme == 'dark':
+                        bg_color = "#262730"
+                        text_color = "white"
+                        border_color = "#444"
+                    else:
+                        bg_color = "white"
+                        text_color = "black"
+                        border_color = "#E0E0E0"
+                    
                     st.markdown(f"""
-                    <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #E0E0E0; margin-bottom: 2rem;">
+                    <div style="background: {bg_color}; padding: 2rem; border-radius: 10px; border: 1px solid {border_color}; margin-bottom: 2rem; color: {text_color};">
                     <h3 style="color: #0066CC; text-align: center;">RESUME PENELITIAN</h3>
-                    <hr>
+                    <hr style="border-color: {border_color}">
                     
                     <h4>📋 Informasi Penelitian</h4>
                     <p><strong>Judul:</strong> {data.get('judul', '')}</p>
@@ -738,7 +830,6 @@ elif selected_page == "📝 Resume Penelitian":
                     <p><strong>Kategori:</strong> {data.get('kategori', '')}</p>
                     
                     <h4>🎯 Tujuan Penelitian</h4>
-                    <ul>
                     """, unsafe_allow_html=True)
                     
                     if data.get('tujuan'):
@@ -747,8 +838,6 @@ elif selected_page == "📝 Resume Penelitian":
                                 st.markdown(f"<li>{item.strip()}</li>", unsafe_allow_html=True)
                     
                     st.markdown("""
-                    </ul>
-                    
                     <h4>📊 Hasil Utama</h4>
                     <p>{}</p>
                     </div>
@@ -758,21 +847,15 @@ elif selected_page == "📝 Resume Penelitian":
             with col_download:
                 st.markdown("#### 📥 Download Options")
                 
-                # Download settings
-                include_header = st.checkbox("Include Header Kelompok", value=True)
-                quality = st.select_slider("Kualitas PDF", ["Standard", "High"])
-                
                 # Generate PDF button
                 if st.button("🖨️ Generate PDF", type="primary", use_container_width=True):
                     with st.spinner("Membuat PDF..."):
                         try:
                             pdf_path = create_resume_pdf(st.session_state.resume_data)
                             
-                            # Read PDF file
                             with open(pdf_path, "rb") as f:
                                 pdf_bytes = f.read()
                             
-                            # Show success and download button
                             st.success("✅ PDF berhasil dibuat!")
                             
                             st.download_button(
@@ -782,12 +865,6 @@ elif selected_page == "📝 Resume Penelitian":
                                 mime="application/pdf",
                                 use_container_width=True
                             )
-                            
-                            # Show preview
-                            st.markdown("**Preview PDF:**")
-                            base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
-                            pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="500" type="application/pdf"></iframe>'
-                            st.markdown(pdf_display, unsafe_allow_html=True)
                             
                         except Exception as e:
                             st.error(f"Error membuat PDF: {str(e)}")
@@ -805,20 +882,9 @@ elif selected_page == "📝 Resume Penelitian":
                         mime="application/json",
                         use_container_width=True
                     )
-                
-                if st.button("🔄 Reset Form", use_container_width=True):
-                    for key in list(st.session_state.keys()):
-                        if key.startswith('resume'):
-                            del st.session_state[key]
-                    st.success("Form berhasil direset!")
-                    time.sleep(1)
-                    st.rerun()
         
         else:
             st.warning("Silakan lengkapi form terlebih dahulu di langkah sebelumnya.")
-            if st.button("Kembali ke Form"):
-                st.session_state.resume_progress = 0
-                st.rerun()
 
 # ===================== HALAMAN KURVA KALIBRASI =====================
 elif selected_page == "📈 Kurva Kalibrasi":
@@ -831,7 +897,6 @@ elif selected_page == "📈 Kurva Kalibrasi":
     with tab1:
         st.markdown("### 📥 Input Data Kalibrasi")
         
-        # Pilihan metode input
         input_method = st.radio(
             "Metode Input:",
             ["📝 Manual Entry", "📁 Upload CSV", "🎲 Contoh Data"],
@@ -861,7 +926,6 @@ elif selected_page == "📈 Kurva Kalibrasi":
             
             if st.button("📊 Analisis Data", type="primary", use_container_width=True):
                 try:
-                    # Parse data
                     x_data = [float(x.strip()) for x in x_input.replace('\n', ',').split(',') if x.strip()]
                     y_data = [float(y.strip()) for y in y_input.replace('\n', ',').split(',') if y.strip()]
                     
@@ -870,7 +934,6 @@ elif selected_page == "📈 Kurva Kalibrasi":
                     elif len(x_data) < 2:
                         st.error("Minimal diperlukan 2 titik data untuk analisis!")
                     else:
-                        # Simpan ke session state
                         st.session_state.x_data = x_data
                         st.session_state.y_data = y_data
                         st.success(f"✅ Data berhasil diparsing: {len(x_data)} titik data")
@@ -892,10 +955,8 @@ elif selected_page == "📈 Kurva Kalibrasi":
                     df = pd.read_csv(uploaded_file)
                     st.success(f"✅ File berhasil dibaca: {len(df)} baris data")
                     
-                    # Tampilkan preview
                     st.dataframe(df.head(), use_container_width=True)
                     
-                    # Pilih kolom
                     if len(df.columns) >= 2:
                         col_select1, col_select2 = st.columns(2)
                         with col_select1:
@@ -916,13 +977,11 @@ elif selected_page == "📈 Kurva Kalibrasi":
         else:  # Contoh Data
             st.markdown("#### 🎲 Contoh Data Kalibrasi")
             
-            # Pilih contoh dataset
             dataset = st.selectbox(
                 "Pilih contoh dataset:",
                 ["Data Linear Sempurna", "Data dengan Noise Sedang", "Data Non-linear"]
             )
             
-            # Generate contoh data
             np.random.seed(42)
             
             if dataset == "Data Linear Sempurna":
@@ -935,7 +994,6 @@ elif selected_page == "📈 Kurva Kalibrasi":
                 x_example = np.linspace(0, 10, 20)
                 y_example = 0.5 * x_example**2 + np.random.normal(0, 1, 20)
             
-            # Tampilkan data
             df_example = pd.DataFrame({
                 'X (Konsentrasi)': x_example,
                 'Y (Respons)': y_example
@@ -950,21 +1008,18 @@ elif selected_page == "📈 Kurva Kalibrasi":
                 st.rerun()
     
     with tab2:
-        if 'x_data' in st.session_state and 'y_data' in st.session_state:
+        if 'x_data' in st.session_state and 'y_data' in st.session_state and len(st.session_state.x_data) > 0:
             x_data = st.session_state.x_data
             y_data = st.session_state.y_data
             
-            # Lakukan analisis
             with st.spinner("Menganalisis data..."):
                 results = analyze_calibration_curve(x_data, y_data)
                 
-                # Tampilkan hasil dalam dua kolom
                 col_results, col_plot = st.columns([1, 2])
                 
                 with col_results:
                     st.markdown("### 📊 Hasil Analisis")
                     
-                    # Tampilkan statistik dalam cards
                     metrics = [
                         ("Slope (Kemiringan)", f"{results['slope']:.6f}", "#4CAF50"),
                         ("Intercept", f"{results['intercept']:.6f}", "#2196F3"),
@@ -977,7 +1032,7 @@ elif selected_page == "📈 Kurva Kalibrasi":
                     for name, value, color in metrics:
                         st.markdown(f"""
                         <div style="background: {color}10; border-left: 4px solid {color}; padding: 1rem; margin: 0.5rem 0; border-radius: 5px;">
-                        <small style="color: #666;">{name}</small>
+                        <small style="color: {'white' if st.session_state.theme == 'dark' else '#666'};">{name}</small>
                         <h4 style="margin: 0; color: {color};">{value}</h4>
                         </div>
                         """, unsafe_allow_html=True)
@@ -1011,13 +1066,11 @@ elif selected_page == "📈 Kurva Kalibrasi":
                 with col_plot:
                     st.markdown("### 📈 Grafik Kurva Kalibrasi")
                     
-                    # Tampilkan plot interaktif
                     st.plotly_chart(results['fig_interactive'], use_container_width=True)
                     
                     # Tombol download
                     col_dl1, col_dl2, col_dl3 = st.columns(3)
                     with col_dl1:
-                        # Save matplotlib figure
                         buf = io.BytesIO()
                         results['fig_matplotlib'].savefig(buf, format='png', dpi=300, bbox_inches='tight')
                         buf.seek(0)
@@ -1031,7 +1084,6 @@ elif selected_page == "📈 Kurva Kalibrasi":
                         )
                     
                     with col_dl2:
-                        # Download data sebagai CSV
                         df_results = pd.DataFrame({
                             'X': x_data,
                             'Y': y_data,
@@ -1044,35 +1096,6 @@ elif selected_page == "📈 Kurva Kalibrasi":
                             data=csv,
                             file_name=f"data_kalibrasi_{datetime.now().strftime('%Y%m%d')}.csv",
                             mime="text/csv",
-                            use_container_width=True
-                        )
-                    
-                    with col_dl3:
-                        # Download report
-                        report_content = f"""
-                        LAPORAN ANALISIS KURVA KALIBRASI
-                        =================================
-                        Tanggal: {datetime.now().strftime("%d %B %Y %H:%M:%S")}
-                        Aplikasi: Nano Research - Kelompok 6 AKA Bogor
-                        
-                        HASIL ANALISIS:
-                        - Persamaan: {results['equation']}
-                        - Slope: {results['slope']:.6f}
-                        - Intercept: {results['intercept']:.6f}
-                        - R²: {results['r_squared']:.6f}
-                        - Jumlah Data: {results['n']}
-                        
-                        DATA:
-                        X, Y
-                        """
-                        for x, y in zip(x_data, y_data):
-                            report_content += f"\n{x},{y}"
-                        
-                        st.download_button(
-                            label="📄 Download Report",
-                            data=report_content,
-                            file_name=f"report_kalibrasi_{datetime.now().strftime('%Y%m%d')}.txt",
-                            mime="text/plain",
                             use_container_width=True
                         )
             
@@ -1094,92 +1117,134 @@ elif selected_page == "📈 Kurva Kalibrasi":
         
         else:
             st.info("👈 Silakan input data terlebih dahulu di tab Input Data")
-            st.image("https://via.placeholder.com/600x300/0066CC/FFFFFF?text=Input+Data+untuk+Analisis", 
-                    caption="Masukkan data untuk melihat analisis kurva kalibrasi")
 
-# ===================== HALAMAN TENTANG KAMI =====================
+# ===================== HALAMAN ANGGOTA KELOMPOK =====================
 else:
-    st.markdown('<h1 class="main-header">👥 Tentang Kami</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Kelompok 6 - Politeknik AKA Bogor 2026</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">👥 Anggota Kelompok 6</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header">Politeknik AKA Bogor - Tahun 2026</p>', unsafe_allow_html=True)
     
-    col_about1, col_about2 = st.columns([2, 1])
+    # Informasi Kelompok
+    col_info1, col_info2 = st.columns([2, 1])
     
-    with col_about1:
-        st.markdown("""
-        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #E0E0E0;">
-        <h3 style="color: #0066CC;">🔬 Nano Research</h3>
-        <p>Aplikasi web ini dikembangkan oleh <strong>Kelompok 6</strong> dari <strong> Prodi D4 Politeknik AKA Bogor</strong> 
-        sebagai bagian dari proyek mata kuliah Logika dan Pemrograman Komputer.</p>
+    with col_info1:
+        if st.session_state.theme == 'dark':
+            card_bg = "#262730"
+            card_border = "#444"
+            text_color = "white"
+        else:
+            card_bg = "white"
+            card_border = "#E0E0E0"
+            text_color = "black"
         
-        <h4>🎯 Misi Kami</h4>
-        <p>Menyediakan tools analisis penelitian yang mudah digunakan 
-        untuk mendukung kegiatan akademik dan penelitian di Politeknik AKA Bogor.</p>
+        st.markdown(f"""
+        <div style="background: {card_bg}; padding: 2rem; border-radius: 10px; border: 1px solid {card_border}; margin-bottom: 2rem; color: {text_color};">
+        <h3 style="color: #0066CC;">🔬 Tentang Kelompok 6</h3>
+        <p>Kelompok 6 terdiri dari 5 anggota mahasiswa <strong>Politeknik AKA Bogor</strong> yang mengembangkan 
+        aplikasi Nano Research sebagai bagian dari proyek mata kuliah Tahun 2026.</p>
         
-        <h4>✨ Fitur Unggulan</h4>
-        <ul>
-        <li><strong>Resume Penelitian Profesional</strong> - Format standar untuk laporan penelitian</li>
-        <li><strong>Analisis Kurva Kalibrasi</strong> - Regresi linear dengan statistik lengkap</li>
-        <li><strong>User-Friendly Interface</strong> - Mudah digunakan bahkan untuk pemula</li>
-        <li><strong>Export Multiple Format</strong> - PDF, CSV, PNG, dan lainnya</li>
-        </ul>
+        <h4 style="color: #0066CC;">🎯 Misi Kelompok</h4>
+        <p>Mengembangkan aplikasi analisis penelitian yang user-friendly, akurat, dan profesional 
+        untuk mendukung kegiatan akademik di lingkungan Politeknik AKA Bogor.</p>
         
-        <h4>🛠️ Teknologi yang Digunakan</h4>
-        <p>Aplikasi ini dibangun dengan:</p>
-        <ul>
-        <li><strong>Streamlit</strong> - Framework web aplikasi Python</li>
-        </ul>
+        <h4 style="color: #0066CC;">📚 Latar Belakang</h4>
+        <p>Aplikasi ini dikembangkan dengan pendekatan <strong>Problem-Based Learning</strong> untuk 
+        memecahkan permasalahan nyata dalam analisis data penelitian di laboratorium.</p>
         </div>
         """, unsafe_allow_html=True)
     
-    with col_about2:
+    with col_info2:
         st.markdown("""
         <div style="background: linear-gradient(135deg, #0066CC 0%, #00B3B3 100%); padding: 2rem; border-radius: 10px; color: white;">
-        <h3 style="color: white;">👨‍🔬 Anggota Kelompok</h3>
-        <ul style="color: white;">
-        <li>Dias Subarna</li>
-        <li>Grhizzello Auricko Benedict Lamo</li>
-        <li>Liza Nurhalizah</li>
-        <li>Naila Amanda Putri</li>
-        <li>Yudho Pamungkas</li>
-        </ul>
-        
         <h4 style="color: white;">🏫 Institusi</h4>
-        <p style="color: white;">Politeknik AKA Bogor<br>
-        Tahun 2026<br>
-        Program Studi: [Nama Program Studi]</p>
+        <p style="color: white;"><strong>Politeknik AKA Bogor</strong></p>
+        <p style="color: white;">Tahun: 2026<br>
+        Program Studi: Analis Kimia<br>
+        Kelas: [Kelas]</p>
         
-        <h4 style="color: white;">📞 Kontak</h4>
-        <p style="color: white;">Email: kelompok6@aka.ac.id<br>
-        GitHub: github.com/kelompok6-aka</p>
+        <h4 style="color: white;">📅 Timeline</h4>
+        <p style="color: white;">• Perencanaan: Jan 2026<br>
+        • Pengembangan: Feb-Mar 2026<br>
+        • Testing: Apr 2026<br>
+        • Presentasi: Mei 2026</p>
         </div>
         """, unsafe_allow_html=True)
     
-    # Timeline Pengembangan
+    # Daftar Anggota
+    st.markdown("## 👨‍🔬 Daftar Anggota Kelompok")
+    
+    # Data anggota
+    anggota_data = [
+        {
+            "nama": "Dias Subarna",
+        },
+        {
+            "nama": "Grhizzello Auricko Benedict Lamo",
+        },
+        {
+            "nama": "Liza Nurhalizah",
+        },
+        {
+            "nama": "Naila Amanda Putri",
+        },
+        {
+            "nama": "Yudho Pamungkas",
+        }
+    ]
+    
+    # Tampilkan anggota dalam cards
+    for i, anggota in enumerate(anggota_data):
+        col1, col2 = st.columns([3, 1])
+        
+        with col1:
+            if st.session_state.theme == 'dark':
+                member_bg = "#1E1E2E"
+                member_border = "#444"
+                member_text = "white"
+            else:
+                member_bg = "#F8F9FA"
+                member_border = "#E0E0E0"
+                member_text = "black"
+            
+            st.markdown(f"""
+            <div style="background: {member_bg}; padding: 1.5rem; border-radius: 10px; border-left: 5px solid #0066CC; margin-bottom: 1rem; color: {member_text};">
+            <h4 style="margin: 0; color: #0066CC;">{anggota['nama']}</h4>
+            <p style="margin: 0.5rem 0; color: #666;">NIM: {anggota['nim']} | Peran: {anggota['peran']}</p>
+            <p style="margin: 0.5rem 0;"><strong>Tugas:</strong> {anggota['tugas']}</p>
+            <div style="margin-top: 1rem;">
+            """, unsafe_allow_html=True)
+            
+            for skill in anggota['skills']:
+                st.markdown(f'<span style="background: #0066CC; color: white; padding: 0.2rem 0.5rem; border-radius: 3px; margin-right: 0.5rem; font-size: 0.8rem;">{skill}</span>', unsafe_allow_html=True)
+            
+            st.markdown("</div></div>", unsafe_allow_html=True)
+        
+        with col2:
+            # Avatar placeholder
+            avatar_color = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7"][i % 5]
+            st.markdown(f"""
+            <div style="width: 80px; height: 80px; background: {avatar_color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+            <span style="font-size: 2rem; color: white;">{anggota['nama'][0]}</span>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Kontribusi masing-masing
     st.markdown("---")
-    st.markdown("### 📅 Timeline Pengembangan")
+    st.markdown("## 📊 Distribusi Tugas")
     
-    timeline_data = {
-        'Fase': ['Perencanaan', 'Pengembangan', 'Presentasi'],
-        'Bulan': ['Des 2025', 'Des 2025', 'Jan 2026'],
-        'Status': ['✓ Selesai', '✓ Selesai', '🔄 Berjalan']
-    }
+    tugas_data = pd.DataFrame({
+        'Area': ['Backend Development', 'Frontend Development', 'UI/UX Design', 
+                'Testing & QA', 'Documentation', 'Deployment'],
+        'Persentase': [25, 20, 15, 20, 10, 10]
+    })
     
-    df_timeline = pd.DataFrame(timeline_data)
-    st.dataframe(df_timeline, use_container_width=True, hide_index=True)
+    fig_tugas = px.bar(tugas_data, x='Persentase', y='Area', orientation='h',
+                      color='Persentase', color_continuous_scale='Blues',
+                      title='Distribusi Tugas Kelompok')
     
-    # GitHub Stats
-    st.markdown("---")
-    st.markdown("### 📊 Statistik Proyek")
+    if st.session_state.theme == 'dark':
+        fig_tugas.update_layout(template='plotly_dark')
     
-    col_stats1, col_stats2, col_stats3, col_stats4 = st.columns(4)
-    with col_stats1:
-        st.metric("Versi", "1.0.0")
-    with col_stats2:
-        st.metric("Commit", "42")
-    with col_stats3:
-        st.metric("Issues", "3")
-    with col_stats4:
-        st.metric("Stars", "⭐")
+    st.plotly_chart(fig_tugas, use_container_width=True)
 
 # ===================== FOOTER =====================
 st.markdown("""
@@ -1187,8 +1252,7 @@ st.markdown("""
 <p>
 🔬 <strong>Nano Research</strong> - Aplikasi Analisis Penelitian<br>
 Dikembangkan oleh Kelompok 6 - Politeknik AKA Bogor © 2026<br>
-<a href="#" style="color: #0066CC;">Documentation</a> | 
-<a href="#" style="color: #0066CC;">Report Issue</a>
+Anggota: Dias Subarna • Grhizzello Auricko • Liza Nurhalizah • Naila Amanda • Yudho Pamungkas
 </p>
 </div>
 """, unsafe_allow_html=True)
