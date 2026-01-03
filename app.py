@@ -275,7 +275,7 @@ def create_resume_pdf(resume_data):
     header_text = f"""
     <para alignment="center">
     <font size="12" color="#FF8C42"><b>NANO RESEARCH</b></font><br/>
-    <font size="10">Kelompok 6 - Politeknik AKA Bogor</font><br/>
+    <font size="10">Politeknik AKA Bogor</font><br/>
     <font size="10">Tahun 2026</font>
     </para>
     """
@@ -292,7 +292,6 @@ def create_resume_pdf(resume_data):
         ["Judul Penelitian", resume_data.get('judul', '')],
         ["Peneliti", resume_data.get('peneliti', '')],
         ["NIM", resume_data.get('nim', '')],
-        ["Kelompok", resume_data.get('kelompok', '')],
         ["Tanggal", resume_data.get('tanggal', datetime.now().strftime("%d %B %Y"))],
         ["Pembimbing", resume_data.get('pembimbing', '')],
     ]
