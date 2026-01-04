@@ -467,7 +467,7 @@ with st.sidebar:
     # Menu Navigasi
     selected_page = st.radio(
         "📌 MENU UTAMA",
-        ["🏠 Beranda", "📝 Resume Penelitian", "📈 Kurva Kalibrasi", "👥 Anggota Kelompok"],
+        ["🏠 Beranda", "📝 Resume Penelitian", "📈 Kurva Kalibrasi", "👥 Tentang Kami"],
         label_visibility="collapsed"
     )
     
