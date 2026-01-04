@@ -820,11 +820,11 @@ elif selected_page == "📈 Kurva Kalibrasi":
         
         input_method = st.radio(
             "Metode Input:",
-            ["📝 Manual Entry", "📁 Upload File", "🎲 Contoh Data"],
+            ["📝 Manual", "📁 Upload File", "🎲 Contoh Data"],
             horizontal=True
         )
         
-        if input_method == "📝 Manual Entry":
+        if input_method == "📝 Manual":
             col_manual1, col_manual2 = st.columns(2)
             
             with col_manual1:
