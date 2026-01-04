@@ -477,8 +477,8 @@ with st.sidebar:
     with st.expander("💡 Tips Cepat"):
         st.info("""
         1. Gunakan Excel/CSV untuk data banyak
-        2. R² > 0.99 = akurasi tinggi
-        3. Simpan hasil sebagai PDF
+        2. R² mendekati 1 = korelasi kuat
+        3. Simpan hasil resume sebagai PDF
         """)
     
     st.markdown("---")
