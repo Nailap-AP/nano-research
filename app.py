@@ -819,7 +819,7 @@ elif selected_page == "📈 Kurva Kalibrasi":
         
         input_method = st.radio(
             "Metode Input:",
-            ["📝 Manual", "📁 Upload File", "🎲 Contoh Data"],
+            ["📝 Manual", "📁 Upload File", "🗃️ Contoh Data"],
             horizontal=True
         )
         
@@ -902,7 +902,7 @@ elif selected_page == "📈 Kurva Kalibrasi":
                     st.error(f"Error membaca file: {str(e)}")
         
         else:  # Contoh Data
-            st.markdown("#### 🎲 Contoh Data Kalibrasi")
+            st.markdown("#### 🗃️ Contoh Data Kalibrasi")
             
             dataset = st.selectbox(
                 "Pilih contoh dataset:",
@@ -1147,7 +1147,7 @@ st.markdown("""
 🔬 <strong>Nano Research</strong> - Aplikasi Analisis Penelitian<br>
 Dikembangkan oleh Kelompok 6 - Politeknik AKA Bogor © 2026<br>
 <strong>Anggota:</strong> Dias Subarna • Grhizzello Auricko Benedict Lamo • Liza Nurhalizah • Naila Amanda Putri • Yudho Pamungkas<br>
-<strong>Warna Tema:</strong> Jingga Muda (#FF8C42) • <strong>Mode:</strong> {} • <strong>Version:</strong> 1.1.0
+<strong>Mode:</strong> {} • <strong>Version:</strong> 1.1.0
 </p>
 </div>
 """.format("🌙 Gelap" if st.session_state.dark_mode else "☀️ Terang"), unsafe_allow_html=True)
