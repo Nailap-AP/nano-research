@@ -479,7 +479,6 @@ with st.sidebar:
         1. Gunakan Excel/CSV untuk data banyak
         2. R² > 0.99 = akurasi tinggi
         3. Simpan hasil sebagai PDF
-        4. Warna tema: Jingga Muda (#FF8C42)
         """)
     
     st.markdown("---")
