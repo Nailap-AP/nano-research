@@ -474,9 +474,9 @@ with st.sidebar:
     st.markdown("---")
     
     # Tips
-    with st.expander("💡 Tips Cepat"):
+    with st.expander("💡 Tips Aplikasi"):
         st.info("""
-        1. Gunakan Excel/CSV untuk data banyak
+        1. Gunakan Excel/CSV untuk memuat data banyak
         2. R² mendekati 1 = korelasi kuat
         3. Simpan hasil resume sebagai PDF
         """)
