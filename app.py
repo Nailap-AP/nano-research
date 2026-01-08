@@ -464,13 +464,6 @@ with st.sidebar:
     
     st.markdown("---")
 
-    # Mode Toggle
-    col_theme1, col_theme2 = st.columns([1, 2])
-    with col_theme1:
-        st.markdown("Peringatan! Jangan tutup menu sidebar saat menggunakan website ini.")
-
-     st.markdown("---")
-
     # Menu Navigasi
     selected_page = st.radio(
         "📌 MENU UTAMA",
