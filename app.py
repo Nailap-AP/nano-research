@@ -827,7 +827,7 @@ elif selected_page == "📈 Kurva Kalibrasi":
             col_manual1, col_manual2 = st.columns(2)
             
             with col_manual1:
-                st.markdown("#### Data X (Konsentrasi)")
+                st.markdown("#### Data X (Variabel Bebas)")
                 x_input = st.text_area(
                     "Masukkan nilai X:",
                     value="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
@@ -836,7 +836,7 @@ elif selected_page == "📈 Kurva Kalibrasi":
                 )
             
             with col_manual2:
-                st.markdown("#### Data Y (Respons)")
+                st.markdown("#### Data Y (Variabel Terikat)")
                 y_input = st.text_area(
                     "Masukkan nilai Y:",
                     value="0.05, 0.98, 2.1, 2.9, 4.2, 5.1, 6.0, 7.1, 8.2, 9.0, 10.1",
