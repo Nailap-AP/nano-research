@@ -452,7 +452,8 @@ with st.sidebar:
     # Mode Toggle
     col_theme1, col_theme2 = st.columns([1, 2])
     with col_theme1:
-        st.markdown("")
+        st.markdown("Peringatan!")
+        st.markdown("Menu sidebar jangan ditutup.")
     with col_theme2:
         if 'dark_mode' not in st.session_state:
             st.session_state.dark_mode = False
