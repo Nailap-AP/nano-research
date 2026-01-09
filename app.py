@@ -443,6 +443,8 @@ with st.sidebar:
         <h2 style="color: white; margin: 0;">NANO RESEARCH</h2>
         <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
         Kelompok 6<br>Politeknik AKA Bogor<br>Tahun 2026
+
+        <br>Peringatan! Menu sidebar jangan ditutup.<br>
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -452,8 +454,7 @@ with st.sidebar:
     # Mode Toggle
     col_theme1, col_theme2 = st.columns([1, 2])
     with col_theme1:
-        st.markdown("Peringatan!")
-        st.markdown("Menu sidebar jangan ditutup.")
+        st.markdown("")
     with col_theme2:
         if 'dark_mode' not in st.session_state:
             st.session_state.dark_mode = False
