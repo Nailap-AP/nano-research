@@ -444,7 +444,7 @@ with st.sidebar:
         <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
         Kelompok 6<br>Politeknik AKA Bogor<br>Tahun 2026
 
-        <br>Peringatan! Menu sidebar jangan ditutup.<br>
+        Peringatan! Menu sidebar jangan ditutup<br>
         </p>
     </div>
     """, unsafe_allow_html=True)
